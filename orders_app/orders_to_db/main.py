@@ -150,7 +150,7 @@ if __name__ == "__main__":
         "host": "34.140.121.89",
         "port": 5432,
     }
-    GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME")
+    GCS_BUCKET_NAME = "bucketedemcloudpgesparter"
     GCS_FILE_PATH = "raw_data/products_additional_info.parquet"
     _create_tables()
     num_orders_generated = 1

@@ -23,7 +23,11 @@ resource "google_compute_instance_from_machine_image" "delivery_app" {
   allow_stopping_for_update = true
 }
 
-resource ""
+resource "google_storage_bucket" "bucketprin" {
+  name          = "bucketedemcloudpgesparter"
+  location      = "europe-southwest1"
+  force_destroy = false
+}
 
 resource "google_compute_instance_from_machine_image" "orders_app" {
   name           = "orders-app"
