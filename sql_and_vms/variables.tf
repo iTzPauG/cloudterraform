@@ -40,3 +40,7 @@ variable "zone" {
   type        = string
   default     = "europe-west1-b"
 }
+
+variable "instance_db_name" {
+  default = "edem-e2e-db"
+}

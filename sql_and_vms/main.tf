@@ -23,7 +23,7 @@ resource "google_compute_instance_from_machine_image" "delivery_app" {
   allow_stopping_for_update = true
 }
 
-
+resource ""
 
 resource "google_compute_instance_from_machine_image" "orders_app" {
   name           = "orders-app"
@@ -52,7 +52,7 @@ resource "google_compute_instance_from_machine_image" "orders_app" {
 }
 
 resource "google_sql_database_instance" "operational_db_instance" {
-    name = "edem-e2e-db"
+    name = var.instance_db_name
     database_version = "POSTGRES_17"
     region = var.region
     deletion_protection = true
@@ -77,7 +77,7 @@ resource "google_sql_database_instance" "operational_db_instance" {
 
 resource "google_sql_database" "ecommerce" {
     name = "ecommerce"
-    instance = google_sql_database_instance.operational_db_instance.name
+    instance = var.instance_db_name
 }
 
 resource "google_pubsub_topic" "order_events" {
@@ -100,7 +100,7 @@ resource "google_pubsub_subscription" "delivery_events_sub" {
 
 resource "google_sql_user" "user_op_db" {
     name = var.user
-    instance = google_sql_database_instance.operational_db_instance.name
+    instance = var.instance_db_name
     password = var.password
 }
 

@@ -1,16 +1,4 @@
 
-# Permiso Pub/Sub Admin para el usuario que ejecuta Terraform
-resource "google_project_iam_member" "pubsub_admin_user" {
-  project = var.project_id
-  role    = "roles/pubsub.admin"
-  member  = "user:pgesparterpubli@gmail.com"
-}
-# Otorga el rol bigquery.dataEditor a la service account indicada
-resource "google_project_iam_member" "bigquery_data_editor_sa" {
-  project = var.project_id
-  role    = "roles/bigquery.dataEditor"
-  member  = "serviceAccount:${var.service_account_email}"
-}
 # BigQuery Resources
 resource "google_bigquery_dataset" "orders_bronze" {
   dataset_id  = "orders_bronze"
@@ -136,4 +124,3 @@ resource "google_pubsub_subscription" "delivery_events_dead_letter_sub" {
   name  = "delivery-events-dead-letter-sub"
   topic = google_pubsub_topic.delivery_events_dead_letter.name
 }
-
