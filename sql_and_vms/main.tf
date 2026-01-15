@@ -23,6 +23,7 @@ resource "google_compute_instance_from_machine_image" "delivery_app" {
   allow_stopping_for_update = true
 }
 
+
 resource "google_storage_bucket" "bucketprin" {
   name          = "bucketedemcloudpgesparter"
   location      = "europe-southwest1"
@@ -66,12 +67,12 @@ resource "google_sql_database_instance" "operational_db_instance" {
         availability_type = "ZONAL"
         disk_size = 100
         ip_configuration {
-            ipv4_enabled = true
-            ssl_mode     = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
-            authorized_networks {
-                name = "public-access"
-                value = local.my_ip_cidr
-            }
+      ipv4_enabled = true
+      ssl_mode     = "ALLOW_UNENCRYPTED_AND_ENCRYPTED"
+      authorized_networks {
+        name  = "public-access"
+        value = local.my_ip_cidr
+      }
         }
     }
     lifecycle {
@@ -111,3 +112,23 @@ resource "google_sql_user" "user_op_db" {
 output "delivery_events_topic_name" {
   value = google_pubsub_topic.delivery_events.name
 }
+
+resource "null_resource" "init_db_schema_direct" {
+  provisioner "local-exec" {
+    command = <<EOT
+      if ! command -v psql >/dev/null 2>&1; then
+        echo "psql no está instalado. Instalando..."
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          brew install postgresql
+        else
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+        fi
+      fi
+      PGPASSWORD="${var.password}" psql --host="${var.publicipdb}" --username="${var.user}" --dbname=ecommerce --port=5432 -f ${path.module}/schema.sql
+    EOT
+    environment = {
+      PGPASSWORD = var.password
+    }
+  }
+}
+

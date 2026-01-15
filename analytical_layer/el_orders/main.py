@@ -73,7 +73,7 @@ if __name__ == "__main__":
     )
     logger = logging.getLogger()
     OLTP_DB_CONFIG = {
-        "dbname": "postgres",
+        "dbname": "ecommerce",  # <-- Cambia esto
         "user": "admin",
         "password": "StrongPassword123!",
         "host": os.getenv("POSTGRES_IP"),

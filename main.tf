@@ -4,6 +4,7 @@ module SqlAndVms {
     password              = var.password
     subnetwork            = var.subnetwork
     user                  = var.user
+    publicipdb            = var.publicipdb
 }
 
 module bigQuery {

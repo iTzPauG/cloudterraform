@@ -54,9 +54,12 @@ if __name__ == "__main__":
         handlers=[logging.StreamHandler()],
     )
     logger = logging.getLogger()
-    subscriber = EventsManager(subscription_name="order-events-sub")
+    import os
+    os.environ["PROJECT_ID"] = "inspiring-bonus-481514-j4"
+    credentials_path = os.path.join(os.path.dirname(__file__), "../orders_to_db/credentials.json")
+    subscriber = EventsManager(subscription_name="order-events-sub", credentials_path=credentials_path)
     subscriber.create_subscriber()
-    publisher = EventsManager(topic_name="delivery-events")
+    publisher = EventsManager(topic_name="delivery-events", credentials_path=credentials_path)
     publisher.create_publisher()
     while True:
         try:

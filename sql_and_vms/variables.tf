@@ -44,3 +44,7 @@ variable "zone" {
 variable "instance_db_name" {
   default = "edem-e2e-db"
 }
+
+variable "publicipdb" {
+  type = string
+}

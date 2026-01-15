@@ -7,10 +7,11 @@ from google.cloud import pubsub_v1
 
 
 class EventsManager:
-    def __init__(self, topic_name=None, subscription_name=None):
+    def __init__(self, topic_name=None, credentials_path=None, subscription_name=None):
         self.payload = {}
         self.topic_name = topic_name
         self.subscription_name = subscription_name
+        self.credentials_path = credentials_path
         self.publisher = None
         self.topic_path = None
         self.subscriber = None
@@ -20,7 +21,10 @@ class EventsManager:
         logging.info("Connecting to PubSub Publisher")
         PROJECT_ID = os.getenv("PROJECT_ID")
         try:
-            self.publisher = pubsub_v1.PublisherClient()
+            if self.credentials_path:
+                self.publisher = pubsub_v1.PublisherClient.from_service_account_file(self.credentials_path)
+            else:
+                self.publisher = pubsub_v1.PublisherClient()
             self.topic_path = self.publisher.topic_path(PROJECT_ID, self.topic_name)
             logging.info("PubSub publisher connected succesfully")
         except ValueError as err:
@@ -41,7 +45,10 @@ class EventsManager:
         logging.info("Connecting to PubSub Subscriptor")
         PROJECT_ID = os.getenv("PROJECT_ID")
         try:
-            self.subscriber = pubsub_v1.SubscriberClient()
+            if self.credentials_path:
+                self.subscriber = pubsub_v1.SubscriberClient.from_service_account_file(self.credentials_path)
+            else:
+                self.subscriber = pubsub_v1.SubscriberClient()
             self.subscriber_path = self.subscriber.subscription_path(
                 PROJECT_ID, self.subscription_name
             )

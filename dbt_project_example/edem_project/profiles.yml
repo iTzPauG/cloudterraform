@@ -1,0 +1,11 @@
+edem_project:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: inspiring-bonus-481514-j4
+      dataset: orders_bronze
+      threads: 1
+      keyfile: credentials.json
+      location: europe-west1

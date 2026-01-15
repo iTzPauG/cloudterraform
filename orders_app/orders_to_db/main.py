@@ -20,7 +20,7 @@ from utils.events_manager import EventsManager
 
 
 def upload_to_gcs(local_file_path, gcs_bucket_name, gcs_file_path):
-    client = storage.Client()
+    client = storage.Client.from_service_account_json(os.path.join(os.path.dirname(__file__), "credentials.json"))
     bucket = client.bucket(gcs_bucket_name)
     blob = bucket.blob(gcs_file_path)
     blob.upload_from_filename(local_file_path)
@@ -143,6 +143,8 @@ if __name__ == "__main__":
         handlers=[logging.StreamHandler()],
     )
     logger = logging.getLogger()
+    import os
+    os.environ["PROJECT_ID"] = "inspiring-bonus-481514-j4"
     DB_CONFIG = {
         "dbname": "ecommerce",
         "user": "admin",
@@ -163,7 +165,8 @@ if __name__ == "__main__":
     if not products_with_details or not users:
         logging.info("No products or users available. Exiting.")
         sys.exit(1)
-    producer = EventsManager("order-events")
+    credentials_path = os.path.join(os.path.dirname(__file__), "credentials.json")
+    producer = EventsManager("order-events", credentials_path=credentials_path)
     producer.create_publisher()
     while True:
         user = random.choice(users)
