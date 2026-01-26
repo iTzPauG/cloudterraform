@@ -5,7 +5,7 @@ edem_project:
       type: bigquery
       method: service-account
       project: inspiring-bonus-481514-j4
-      dataset: orders_bronze
       threads: 1
+      dataset: ecommerce_delivery_gold
       keyfile: credentials.json
       location: europe-west1

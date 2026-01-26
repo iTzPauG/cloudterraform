@@ -36,10 +36,10 @@ models:
       - "{{ ensure_dataset_exists(target.dataset) }}"
     delivery:
       mart:
-        +dataset: delivery_gold
+        # Sin +schema para que use el dataset base del profile
     orders:
       mart:
         +dataset: order_gold
     analytics:
-      +dataset: analytics
+      +materialized: table
 
